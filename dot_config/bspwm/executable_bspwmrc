@@ -1,0 +1,78 @@
+#!/bin/sh
+set -xv
+exec 2>>/tmp/bspwm.log
+# ##############################################################################
+# #                                  FUNCTIONS                                 # 
+# ##############################################################################
+
+# Credits to 6gk/polka
+rule() { bspc rule -a "$@" & }
+config() { bspc config "$@" & }
+start() { pkill -x "$1"; { sleep 0.1; "$@" & }; }
+
+# ##############################################################################
+# #                                AUTOSTART APPS                              #
+# ##############################################################################
+
+# Autostart Apps
+pgrep -x sxhkd > /dev/null || sxhkd &
+# pkill eww ; /usr/local/bin/eww open bar ; /usr/local/bin/eww open bar1 &
+# pkill eww ; $HOME/.config/eww/scripts/bar.sh show
+# $HOME/sh/picom/init-picom.sh
+
+# Setup wallpaper
+# nitrogen --restore &
+
+# Kizu said: I hate mouse drift.
+# I am too lazy to remove this but not enough to avoid writing a 2 line comment over it.
+# xset m 0 0
+
+# Fix eww bar fullscreen behavior
+# pkill eww_fullscreen_fix.sh ; $HOME/.config/bspwm/scripts/eww_fullscreen_fix.sh &
+
+# ##############################################################################
+# #                                 WINDOW RULES                               #
+# ##############################################################################
+
+#bspc monitor DVI-D-0 -d 7 8 9
+#bspc monitor DVI-D-0 -d 7 8 9
+#bspc monitor DP-0 -d 1 2 3
+
+bspc monitor HDMI-0 -d 6 7
+bspc monitor DP-0 -d 1 2 3 4 5
+bspc monitor DVI-D-0 -d 8 9
+
+rule discord desktop=2 follow=off
+rule xdman-Main desktop=3 follow=off
+rule keepassxc desktop=9 follow=off
+rule KeePassXC desktop=9 follow=off
+
+# ##############################################################################
+# #                            GENERAL CONFIGURATION                           #
+# ##############################################################################
+
+config pointer_modifier             Mod4
+
+config window_gap                   1
+config border_width 		    1
+config focused_border_color 	    "#7ba5dd"
+config normal_border_color 	    "#0b0f10"
+
+# This should match the px width of the eww bar
+config left_padding                 51
+
+config split_ratio                  0.56
+config borderless_monocle           false
+config gapless_monocle              false
+
+# Not sure i want this yet...
+# https://github.com/yousufinternet/config-files/blob/master/.config/bspwm/bspwmrc
+#for desk in {1,2,3,4,5,6}; do
+#	bspc desktop $desk --layout monocle
+#done
+
+# ##############################################################################
+# #                                 MISCELLANEOUS                              #
+# ##############################################################################
+xdo lower -N eww-bar
+xsetroot -cursor_name left_ptr &
